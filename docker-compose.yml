@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  explorer:
+    image: "node:8"
+    container_name: explorer
+    user: "0:0"
+    working_dir: /home/node/app
+    volumes:
+      - ".:/home/node/app"
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    command: "bash docker-ops.sh start"
+    #command: "ping postgresql"
+  postgresql:
+    image: centos/postgresql-96-centos7
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_DATABASE=tendermintexplorer
+      - POSTGRESQL_USER=tendermint
+      - POSTGRESQL_PASSWORD=password
+    volumes:
+      - "../.pgdata:/var/lib/pgsql/data"
+      - "./app/persistence/postgreSQL/db/:/opt/app-root/src"
